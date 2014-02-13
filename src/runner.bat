@@ -20,4 +20,8 @@ python TBModeller.py testdata\T0644.fasta
 
 pause
 
+echo Testing Multiple DR Files
+
+python TBModeller.py testdata\T0644.dr testdata\T0645.dr testdata\T0648.dr
+
 echo Finished!
