@@ -2,13 +2,14 @@
 
 TBModeller - A simple Template-Based Modelling program for Protein Sequences
 
-Copyright (c) Sean Lander 2014 under GPL v3
+Copyright (c) Sean Lander 2014 under GPL v2
 
 """
 
 from Protein import Protein
 from Bio import SeqIO
 from Bio.Seq import Seq
+from Bio.Alphabet import IUPAC
 import sys
 import re
 
@@ -24,26 +25,35 @@ if __name__ == "__main__":
 	if len(sys.argv) < 2:
 		print("Error: Expected 2+ arguments, received {0}".format(len(sys.argv)))
 		sys.exit()
-	for i in range(1,len(sys.argv)):
+	i = 1
+	while i < len(sys.argv):
 
 		input = sys.argv[i]
 		if ".fasta" in input:
 			# Fasta file
 			for seq_record in SeqIO.parse(input, "fasta"):
-				targets.append(Protein(seq_record.seq))
+				targets.append(Protein(seq_record.id,seq_record.seq))
+				print(seq_record.seq.alphabet)
 		elif ".dr" in input:
 			# DR file
 			f = open(input,'r')
+			id = 0
 			sequence = []
 			for line in f:
 				# Check format, use residue lines only
+				if re.match("TARGET",line):
+					id = line.split('\t')[1]
 				if not re.search("\w\s\w\s\d+",line):
 					continue
 				sequence.append(line.split('\t')[0])
 			sequence = ''.join(sequence)
-			targets.append(Protein(Seq(sequence)))
+			targets.append(Protein(id,Seq(sequence,IUPAC.protein)))
 		else:
 			# Raw sequence
-			targets.append(Protein(Seq(input)))
+			id = input
+			i = i+1
+			input = sys.argv[i]
+			targets.append(Protein(id,Seq(input,IUPAC.protein)))
+		i = i+1
 
 	main()

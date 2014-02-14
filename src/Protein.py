@@ -10,14 +10,19 @@ import sqlite3
 
 class Protein:
 
-	__template = []
-	__seq = None
+	_pid = None
+	_seq = None
+	_pdb = None
 
-	def __init__(self,sequence=None):
+	def __init__(self,pid=None,sequence=None):
+		self.pid = pid
 		self.seq = sequence
+		self.pdb = {"REMARK":[],"ATOM":[]}
+		if self.pid:
+			self.pdb["REMARK"].append("Template for target {0}".format(self.pid))
 
 	def saveToDb(self):
 		print("Save to db")
 
 	def __str__(self):
-		return str(self.seq)
+		return str(self.pdb)
