@@ -20,6 +20,7 @@ import os
 import time
 import re
 import sys
+import json
 
 rcsb_url = 'http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&structureId=%s'  ## PDB website
 
@@ -36,16 +37,28 @@ class Protein:
 	_pdbs = None
 	_templates = None
 	_templatesfolder = None
+	_fastas = None
+	_fastasfolder = None
+	_alignments = None
+	_alignmentsfolder = None
 
 	def __init__(self,pid=None,sequence=None,debug=False):
 		self.pid = pid if pid else str(datetime.now())
 		self.seq = sequence
 		self.debug = debug
 		self.templates = {}
-		self.pdbs = []
+		self.fastas = {}
+		self.alignments = {}
 		self.pdb = None
+		self.pdbs = []
 		# Prepare folders
+		self.fastasfolder = 'fastas-%s' % str(self.pid)
+		self.alignmentsfolder = 'alignments-%s' % str(self.pid)
 		self.templatesfolder = 'templates-%s' % str(self.pid)
+		if not os.path.exists(self.fastasfolder):
+			os.mkdir(self.fastasfolder)
+		if not os.path.exists(self.alignmentsfolder):
+			os.mkdir(self.alignmentsfolder)
 		if not os.path.exists(self.templatesfolder):
 			os.mkdir(self.templatesfolder)
 		self.ex_resolution = re.compile(b'REMARK\s*2 RESOLUTION\.\s*([0-9\.]+|NOT APPLICABLE)\s+.*')
@@ -59,13 +72,26 @@ class Protein:
 			print(self.seq)
 			result_handle = NCBIWWW.qblast("blastp","pdb",str(self.seq))
 			print("BLAST Request Finished")
+			sys.stdout.flush()
 		else:
 			result_handle = NCBIWWW.qblast("blastp","pdb",str(self.seq),expect=0.01)
 		blast_records = NCBIXML.parse(result_handle)
 		for record in blast_records:
 			for alignment in record.alignments:
-				if self.debug:
-					for hsp in alignment.hsps:
+				id = alignment.accession
+				self.templates[id] = {"fasta":self.getFastaFromId(id),
+					'asequence':alignment.title,
+					'alength':alignment.length,
+					"alignments":[]}
+				for hsp in alignment.hsps:
+					self.templates[id]["alignments"].append({'expect':hsp.expect,
+						'score':hsp.score,
+						'identities':hsp.identities,
+						'similarity':(100*hsp.identities/len(self.seq)),
+						'target':hsp.query,
+						'match':hsp.match,
+						'template':hsp.sbjct})
+					if self.debug:
 						print()
 						print('****ALIGNMENT***')
 						print('id:',alignment.accession)
@@ -78,8 +104,20 @@ class Protein:
 						print("Match   :" + hsp.match[0:75] + '...')
 						print("Template:" + hsp.sbjct[0:75] + '...')
 						print()
-				id = alignment.accession
-				self.templates[id.split('_')[0]] = self.getFastaFromId(id)
+
+				self.fastas[id] = self.templates[id]['fasta']
+				self.alignments[id] = self.templates[id]['alignments']
+				fname = '%s/%s.fasta' % (self.fastasfolder,id)
+				if not os.path.exists(fname):
+					f = open(fname,'w')
+					SeqIO.write(self.fastas[id],f,'fasta')
+					f.close()
+				for i,a in enumerate(self.alignments[id]):
+					fname = '%s/%s-%s.alignment' % (self.alignmentsfolder,id,str(i))
+					if not os.path.exists(fname):
+						f = open(fname,'w')
+						json.dump(a,f)
+						f.close()
 
 	def getFastaFromId(self,id):
 		handle = Entrez.efetch(db="protein", rettype="fasta", id=id)
@@ -93,10 +131,10 @@ class Protein:
 	def getPDBs(self):
 		results = []
 		for id in self.templates.keys():
-			handle = self.getRemotePDBHandle(id)
+			handle = self.getRemotePDBHandle(id.split('_')[0])
 			lines,infos = self.parsePdbFromHandle(handle)
 			if id in self.templates:
-				self.templates[id].__dict__.update(infos)
+				self.templates[id]['fasta'].__dict__.update(infos)
 			fname = '%s/%s.pdb' % (self.templatesfolder,id)
 			if not os.path.exists(fname):
 				f = open(fname,'wb',1)
@@ -178,7 +216,7 @@ class Protein:
 		return lines, infos
 
 	def choosePDB(self):
-		self.pdb = self.templates[0]
+		self.pdb = None
 
 	def __str__(self):
 		return str(self.pid)

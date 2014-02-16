@@ -38,3 +38,4 @@ nosetests.xml
 # Project Specific
 src/templates-*
 src/alignments-*
+src/fastas-*
