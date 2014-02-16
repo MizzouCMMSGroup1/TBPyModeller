@@ -7,9 +7,13 @@ Copyright (c) Sean Lander 2014 under GPL v2
 """
 
 from Protein import Protein
+
 from Bio import SeqIO
-from Bio.Seq import Seq
+from Bio.Align import MultipleSeqAlignment
 from Bio.Alphabet import IUPAC
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+
 import sys
 import re
 
@@ -18,6 +22,7 @@ targets = []
 def main():
 	for target in targets:
 		print(target)
+		target.getTemplates()
 
 if __name__ == "__main__":
 	# RUN ME
@@ -32,8 +37,8 @@ if __name__ == "__main__":
 		if ".fasta" in input:
 			# Fasta file
 			for seq_record in SeqIO.parse(input, "fasta"):
+				seq_record.seq.alphabet = IUPAC.protein
 				targets.append(Protein(seq_record.id,seq_record.seq))
-				print(seq_record.seq.alphabet)
 		elif ".dr" in input:
 			# DR file
 			f = open(input,'r')

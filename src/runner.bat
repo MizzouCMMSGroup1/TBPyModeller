@@ -8,6 +8,8 @@ python TBModeller.py T0644 MKFLKFSLLTAVLLSVVFAFSSCGDDDDTGYLPPSQAIQDALKKLYPNATAIK
 
 pause
 
+GOTO Finished
+
 echo Testing DR File
 
 python TBModeller.py testdata\T0644.dr
@@ -23,5 +25,7 @@ pause
 echo Testing Multiple DR Files
 
 python TBModeller.py testdata\T0644.dr testdata\T0645.dr testdata\T0648.dr
+
+:Finished
 
 echo Finished!
