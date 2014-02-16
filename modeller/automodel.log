@@ -1,0 +1,69 @@
+
+                         MODELLER 9.13, 2014/02/12, r9876
+
+     PROTEIN STRUCTURE MODELLING BY SATISFACTION OF SPATIAL RESTRAINTS
+
+
+                     Copyright(c) 1989-2014 Andrej Sali
+                            All Rights Reserved
+
+                             Written by A. Sali
+                               with help from
+              B. Webb, M.S. Madhusudhan, M-Y. Shen, G.Q. Dong,
+          M.A. Marti-Renom, N. Eswar, F. Alber, M. Topf, B. Oliva,
+             A. Fiser, R. Sanchez, B. Yerkovich, A. Badretdinov,
+                     F. Melo, J.P. Overington, E. Feyfant
+                 University of California, San Francisco, USA
+                    Rockefeller University, New York, USA
+                      Harvard University, Cambridge, USA
+                   Imperial Cancer Research Fund, London, UK
+              Birkbeck College, University of London, London, UK
+
+
+Kind, OS, HostName, Kernel, Processor: 4, Darwin natasha.lan 13.0.0 x86_64
+Date and time of compilation         : 2014/02/11 22:51:41
+MODELLER executable type             : mac10v4-intel64
+Job starting time (YY/MM/DD HH:MM:SS): 2014/02/15 18:35:54
+
+openf___224_> Open           $(LIB)/restyp.lib
+openf___224_> Open           ${MODINSTALL9v13}/modlib/resgrp.lib
+rdresgr_266_> Number of residue groups:        2
+openf___224_> Open           ${MODINSTALL9v13}/modlib/sstruc.lib
+
+Dynamically allocated memory at   amaxlibraries [B,KiB,MiB]:       191566     187.076     0.183
+
+Dynamically allocated memory at   amaxlibraries [B,KiB,MiB]:       192094     187.592     0.183
+openf___224_> Open           ${MODINSTALL9v13}/modlib/resdih.lib
+
+Dynamically allocated memory at   amaxlibraries [B,KiB,MiB]:       240694     235.053     0.230
+rdrdih__263_> Number of dihedral angle types         :        9
+              Maximal number of dihedral angle optima:        3
+              Dihedral angle names                   :  Alph Phi Psi Omeg chi1 chi2 chi3 chi4 chi5
+openf___224_> Open           ${MODINSTALL9v13}/modlib/radii.lib
+
+Dynamically allocated memory at   amaxlibraries [B,KiB,MiB]:       253994     248.041     0.242
+openf___224_> Open           ${MODINSTALL9v13}/modlib/radii14.lib
+openf___224_> Open           ${MODINSTALL9v13}/modlib/af_mnchdef.lib
+rdwilmo_274_> Mainchain residue conformation classes:  APBLE
+openf___224_> Open           ${MODINSTALL9v13}/modlib/mnch.lib
+rdclass_257_> Number of classes:        5
+openf___224_> Open           ${MODINSTALL9v13}/modlib/mnch1.lib
+openf___224_> Open           ${MODINSTALL9v13}/modlib/mnch2.lib
+openf___224_> Open           ${MODINSTALL9v13}/modlib/mnch3.lib
+openf___224_> Open           ${MODINSTALL9v13}/modlib/xs4.mat
+rdrrwgh_268_> Number of residue types:       21
+io_data____W> Setting io.atom_files_directory to a colon-delimited string is
+              deprecated, as it is not robust on Windows systems. Set it to
+              a list of directories instead. For example:
+              env.io.atom_files_directory = ['pdb2']
+openf___224_> Open           build_profile.ali
+
+Dynamically allocated memory at   amaxalignment [B,KiB,MiB]:       269789     263.466     0.257
+
+Dynamically allocated memory at   amaxalignment [B,KiB,MiB]:       284881     278.204     0.272
+
+Dynamically allocated memory at   amaxalignment [B,KiB,MiB]:       300281     293.243     0.286
+
+Dynamically allocated memory at   amaxalignment [B,KiB,MiB]:       331081     323.321     0.316
+read_al_373E> Protein specified in ALIGN_CODES(i) was not found
+              in the alignment file; ALIGN_CODES(       1) =  3U1W
