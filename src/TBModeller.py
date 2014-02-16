@@ -19,10 +19,13 @@ import re
 
 targets = []
 
+debug = True
+
 def main():
 	for target in targets:
 		print(target)
 		target.getTemplates()
+		target.getPDBs()
 
 if __name__ == "__main__":
 	# RUN ME
@@ -38,7 +41,7 @@ if __name__ == "__main__":
 			# Fasta file
 			for seq_record in SeqIO.parse(input, "fasta"):
 				seq_record.seq.alphabet = IUPAC.protein
-				targets.append(Protein(seq_record.id,seq_record.seq))
+				targets.append(Protein(seq_record.id,seq_record.seq,debug=debug))
 		elif ".dr" in input:
 			# DR file
 			f = open(input,'r')
@@ -52,13 +55,13 @@ if __name__ == "__main__":
 					continue
 				sequence.append(line.split('\t')[0])
 			sequence = ''.join(sequence)
-			targets.append(Protein(id,Seq(sequence,IUPAC.protein)))
+			targets.append(Protein(id,Seq(sequence,IUPAC.protein),debug=debug))
 		else:
 			# Raw sequence
 			id = input
 			i = i+1
 			input = sys.argv[i]
-			targets.append(Protein(id,Seq(input,IUPAC.protein)))
+			targets.append(Protein(id,Seq(input,IUPAC.protein),debug=debug))
 		i = i+1
 
 	main()
