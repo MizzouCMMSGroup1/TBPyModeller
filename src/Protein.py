@@ -1,10 +1,15 @@
 """
 
-Proein class for TBModeller
+Protein class for TBModeller
 
 Copyright (c) Sean Lander 2014 under GPL v2
 
 """
+
+from Template import Template
+from Alignment import Alignment
+from PDB import PDB
+from Atom import Atom
 
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
@@ -24,23 +29,74 @@ import json
 
 rcsb_url = 'http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&structureId=%s'  ## PDB website
 
+amino3to1 = {
+	"ALA":"A",
+	"ARG":"R",
+	"ASN":"N",
+	"ASP":"D",
+	"CYS":"C",
+	"GLU":"E",
+	"GLN":"Q",
+	"GLY":"G",
+	"HIS":"H",
+	"ILE":"I",
+	"LEU":"L",
+	"LYS":"K",
+	"MET":"M",
+	"PHE":"F",
+	"PRO":"P",
+	"SER":"S",
+	"THR":"T",
+	"TRP":"W",
+	"TYR":"Y",
+	"VAL":"V",
+	"MYL":"X"
+}
+amino1to3 = {
+	"A":"ALA",
+	"R":"ARG",
+	"N":"ASN",
+	"D":"ASP",
+	"C":"CYS",
+	"E":"GLU",
+	"Q":"GLN",
+	"G":"GLY",
+	"H":"HIS",
+	"I":"ILE",
+	"L":"LEU",
+	"K":"LYS",
+	"M":"MET",
+	"F":"PHE",
+	"P":"PRO",
+	"S":"SER",
+	"T":"THR",
+	"W":"TRP",
+	"Y":"TYR",
+	"V":"VAL",
+	"X":"MYL"
+}
+
 class Protein:
 
 	# Structure -> Model -> Chain -> Residue -> Atom
 
 	NMR_RESOLUTION = 3.5
 
-	_debug = False
-	_pid = None
-	_seq = None
-	_pdb = None
-	_pdbs = None
-	_templates = None
-	_templatesfolder = None
-	_fastas = None
-	_fastasfolder = None
-	_alignments = None
-	_alignmentsfolder = None
+	debug = False
+	'''
+	Protein variables
+	pid
+	seq
+	templates
+	templatesfolder
+	fastas
+	fastasfolder
+	alignments
+	alignmentsfolder
+	pdb
+	pdbs
+	targetsfolder
+	'''
 
 	def __init__(self,pid=None,sequence=None,debug=False):
 		self.pid = pid if pid else str(datetime.now())
@@ -48,19 +104,23 @@ class Protein:
 		self.debug = debug
 		self.templates = {}
 		self.fastas = {}
-		self.alignments = {}
+		self.alignments = []
 		self.pdb = None
-		self.pdbs = []
+		self.pdbs = {}
 		# Prepare folders
 		self.fastasfolder = 'fastas-%s' % str(self.pid)
 		self.alignmentsfolder = 'alignments-%s' % str(self.pid)
 		self.templatesfolder = 'templates-%s' % str(self.pid)
+		self.targetsfolder = 'targets'
 		if not os.path.exists(self.fastasfolder):
 			os.mkdir(self.fastasfolder)
 		if not os.path.exists(self.alignmentsfolder):
 			os.mkdir(self.alignmentsfolder)
 		if not os.path.exists(self.templatesfolder):
 			os.mkdir(self.templatesfolder)
+		if not os.path.exists(self.targetsfolder):
+			os.mkdir(self.targetsfolder)
+		# Resolution regex for PDB file
 		self.ex_resolution = re.compile(b'REMARK\s*2 RESOLUTION\.\s*([0-9\.]+|NOT APPLICABLE)\s+.*')
 
 	def saveToDb(self):
@@ -70,20 +130,66 @@ class Protein:
 		# http://biopython.org/DIST/docs/api/Bio.Blast.NCBIWWW-module.html
 		if self.debug:
 			print(self.seq)
-			result_handle = NCBIWWW.qblast("blastp","pdb",str(self.seq))
-			print("BLAST Request Finished")
-			sys.stdout.flush()
-		else:
-			result_handle = NCBIWWW.qblast("blastp","pdb",str(self.seq),expect=0.01)
+		# Send BLAST request to server
+		# Use blastp (protein) for the method
+		# Use pdb as the database
+		result_handle = NCBIWWW.qblast("blastp","pdb",str(self.seq),expect=0.01)
+		# Parse the results into blast records
 		blast_records = NCBIXML.parse(result_handle)
+		if self.debug:
+			print("BLAST Request Finished")
+
+		# Read through each blast record
 		for record in blast_records:
+			# Grab the alignments from each record
 			for alignment in record.alignments:
+				# Use the alignment id as the template key
 				id = alignment.accession
+				fasta = self.getFastaFromId(id)
+				title = alignment.title
+				length = alignment.length
+				# Set up the template object for this id
+				template = Template(
+					id=id,fasta=fasta,sequence=title,
+					length=length,alignments=[]
+				)
+				# Store the template in the template dict
+				self.templates[id] = template
+				"""
 				self.templates[id] = {"fasta":self.getFastaFromId(id),
 					'asequence':alignment.title,
 					'alength':alignment.length,
 					"alignments":[]}
+				"""
+				# Store fasta in dict
+				self.fastas[id] = fasta
+				# Get all alignments for this template
 				for hsp in alignment.hsps:
+					# Create an alignment object
+					a = Alignment(
+						id=id,title=title,expect=hsp.expect,score=hsp.score,
+						identities=hsp.identities,similarity=(100*hsp.identities/len(self.seq)),
+						target=hsp.query,targetstart=hsp.query_start,match=hsp.match,
+						template=hsp.sbjct,templatestart=hsp.sbjct_start,length=length
+					)
+					# Alignment isn't necessarily the same size as the sequence
+					targetfront = ['_']*(a.targetstart-1)
+					targetend = ['_']*(self.seq.length-(a.targetstart+a.length))
+					a.target = targetfront + a.target + targetend
+					a.length = len(a.target)
+					
+					templatefront = ['_']*(a.templatestart-1)
+					templateend = ['_']*(self.seq.length-(a.templatestart+a.length))
+					a.template = templatefront + a.template + templateend
+
+					if self.debug:
+						print("Seq vs Target Length:",self.seq.length,a.length)
+						sys.exit()
+
+					# Append the alignment to the template's alignments
+					self.templates[id].alignments.append(a)
+					self.alignments.append(a)
+					"""
 					self.templates[id]["alignments"].append({'expect':hsp.expect,
 						'score':hsp.score,
 						'identities':hsp.identities,
@@ -91,12 +197,14 @@ class Protein:
 						'target':hsp.query,
 						'match':hsp.match,
 						'template':hsp.sbjct})
+					"""
+
 					if self.debug:
 						print()
 						print('****ALIGNMENT***')
-						print('id:',alignment.accession)
-						print('sequence:', alignment.title)
-						print('length:',alignment.length)
+						print('id:',id)
+						print('sequence:', title)
+						print('length:',length)
 						print('e value:', hsp.expect)
 						print('score:', hsp.score)
 						print('identities:',(100*hsp.identities/len(self.seq))) # need to print percentage of similarities
@@ -105,19 +213,23 @@ class Protein:
 						print("Template:" + hsp.sbjct[0:75] + '...')
 						print()
 
-				self.fastas[id] = self.templates[id]['fasta']
-				self.alignments[id] = self.templates[id]['alignments']
-				fname = '%s/%s.fasta' % (self.fastasfolder,id)
-				if not os.path.exists(fname):
-					f = open(fname,'w')
-					SeqIO.write(self.fastas[id],f,'fasta')
-					f.close()
-				for i,a in enumerate(self.alignments[id]):
-					fname = '%s/%s-%s.alignment' % (self.alignmentsfolder,id,str(i))
-					if not os.path.exists(fname):
-						f = open(fname,'w')
-						json.dump(a,f)
-						f.close()
+		# Save off the fasta file
+		for id,fasta in self.fastas.items():
+			fname = '%s/%s.fasta' % (self.fastasfolder,id)
+			if not os.path.exists(fname):
+				f = open(fname,'w')
+				SeqIO.write(fasta,f,'fasta')
+				f.close()
+
+		# Save off the alignments
+		for i,a in enumerate(self.alignments):
+			fname = '%s/%s-%s.alignment' % (self.alignmentsfolder,a.id,str(i))
+			if not os.path.exists(fname):
+				f = open(fname,'w')
+				json.dump(a.toJSON(),f)
+				f.close()
+
+		return self.templates.keys()
 
 	def getFastaFromId(self,id):
 		handle = Entrez.efetch(db="protein", rettype="fasta", id=id)
@@ -133,14 +245,18 @@ class Protein:
 		for id in self.templates.keys():
 			handle = self.getRemotePDBHandle(id.split('_')[0])
 			lines,infos = self.parsePdbFromHandle(handle)
+			pdb = PDB(infos=infos,lines=lines)
 			if id in self.templates:
-				self.templates[id]['fasta'].__dict__.update(infos)
+				self.templates[id].fasta.__dict__.update(infos)
+			self.templates[id].pdb = pdb
+			self.pdbs[id] = pdb
 			fname = '%s/%s.pdb' % (self.templatesfolder,id)
 			if not os.path.exists(fname):
 				f = open(fname,'wb',1)
 				f.writelines(lines)
 				f.close()
 			results.append(fname)
+		return results
 
 	def getRemotePDBHandle( self, id ):
 		"""
@@ -201,7 +317,7 @@ class Protein:
 
 			res_match = res_match or self.ex_resolution.search( l )
 
-			if first_model_only and l[:6] == 'ENDMDL':
+			if first_model_only and l[:6] == b'ENDMDL':
 				break
 
 		if res_match:
@@ -215,8 +331,151 @@ class Protein:
 
 		return lines, infos
 
-	def choosePDB(self):
-		self.pdb = None
+	def alignPDB(self):
+		# Sort the alignments by similarity
+		alignments = self.alignments
+		alignments.sort(key = lambda a: a.score)
+		target = None
+		template = None
+		alignment = None
+		# Get the highest scoring alignment with similarity below 90%
+		for a in alignments:
+			if a.similarity > 90: continue
+			else:
+				alignment = a
+				target = a.target
+				template = a.template
+				pdb = self.pdbs[a.id]
+		if self.debug:
+			print("Selected Template",alignment.id)
+		# We now have the alignment and the pdb
+		# Convert the pdb to a residue sequence
+		seq = []
+		curres = None
+		res = []
+		first = True
+		for line in pdb.lines:
+			# Decode from byte array
+			line = line.decode()
+			# Grab only ATOM lines
+			if line[:6] == 'ATOM  ':
+				if self.debug:
+					print("Line:",line)
+				# Check to see if residue changed
+				if line[17:20] != curres or line[12:16] == '  N ':
+					if self.debug:
+						print("New Res:",curres)
+					# Append the residue to the sequence
+					if res: seq.append((amino3to1[curres],res))
+					# Reset the residue
+					res = []
+				# Make sure current residue name is set
+				curres = line[17:20]
+				# Store off the atom information
+				atom = Atom(
+					atomName=line[12:16],
+					altLoc=line[16],
+					resName=line[17:20],
+					chainId=line[21],
+					codeForInsertion=line[26],
+					xcoord=float(line[30:38]),
+					ycoord=float(line[38:46]),
+					zcoord=float(line[46:54]),
+					occ=float(line[54:60]),
+					temp=float(line[60:66]),
+					elemSym=line[76:78],
+					charge=line[78:80]
+				)
+				# And add it to the residue (in the proper order)
+				res.append(atom)
+
+				# If this is the first atom fill in the blanks from the PDB
+				if first:
+					first = False
+					# Residue number of first residue in PDB
+					blanks = int(line[22:26])
+					for k in range(1,blanks):
+						resname = '_'
+						res = []
+						res.append(Atom(atomName=' N  ',resName=resname))
+						res.append(Atom(atomName=' CA ',resName=resname))
+						res.append(Atom(atomName=' C  ',resName=resname))
+						res.append(Atom(atomName=' O  ',resName=resname))
+						seq.append((resname,res))
+
+		# Add the final residue to the sequence
+		seq.append((amino3to1[curres],res))
+
+		# Sequence has been pulled out
+		if self.debug:
+			output = []
+			for s in seq:
+				output.append(s[0])
+			print(''.join(output))
+
+		i = 0 # template
+		j = 0 # seq
+		targetseq = [] # final sequence
+		if self.debug:
+			print("%8s%8s%8s" % ("TARGET","TEMPLATE","PDB"))
+		while i < len(template) and j < len(seq):
+			if self.debug:
+				print("%8s%8s%8s" % (target[i],template[i],seq[j][0]))
+
+			# Template has a blank
+			# Fill in blank data for that residue
+			if '_' == template[i]:
+				resname = amino1to3[target[i]]
+				res = []
+				res.append(Atom(atomName=' N  ',resName=resname))
+				res.append(Atom(atomName=' CA ',resName=resname))
+				res.append(Atom(atomName=' C  ',resName=resname))
+				res.append(Atom(atomName=' O  ',resName=resname))
+				targetseq.append(res)
+				i += 1
+				continue
+			# Target has a blank
+			# Skip that line
+			if '_' == target[i]:
+				i += 1
+				j += 1
+				continue
+			# PDB doesn't match template sequence ERROR
+			if seq[j][0] != '_' and template[i] != seq[j][0]:
+				raise BaseException("Template doesn't match PDB: (%04d)%c - (%04d)%c" % (i,template[i],j,seq[j][0]))
+
+			# Everything lines up!
+			# Copy over the data
+			resname = amino1to3[target[i]]
+			res = []
+			# Take the atoms from the residue and swap residue names
+			for atom in seq[j][1]:
+				atom.resName = resname
+				res.append(atom)
+			# Append it to the list and increment counters
+			targetseq.append(res)
+			i += 1
+			j += 1
+
+		# Time to make the PDB
+		lines = []
+		lines.append("REMARK Template for target %s".format(self.pid))
+		i_atom = 0
+		i_residue = 0
+		for res in seq:
+			i_residue += 1
+			for atom in res:
+				i_atom += 1
+				lines.append('ATOM  %5d %4s%c%3s %c%4d%c   %8.3f%8.3f%8.3f%6.2f%6.2f          %2s%2s' % (
+					i_atom,atom.atomName,atom.altLoc,atom.resName,atom.chainId,i_residue,atom.codeForInsertion,
+					atom.xcoord,atom.ycoord,atom.zcoord,atom.occ,atom.temp,atom.elemSym,atom.charge
+				))
+
+		fname = '%s/%s.pdb' % (self.targetsfolder,self.pid)
+		if not os.path.exists(fname):
+			f = open(fname,'wb',1)
+			f.writelines(lines)
+			f.close()
 
 	def __str__(self):
 		return str(self.pid)

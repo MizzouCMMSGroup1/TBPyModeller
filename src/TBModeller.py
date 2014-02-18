@@ -23,9 +23,11 @@ debug = True
 
 def main():
 	for target in targets:
-		print(target)
-		target.getTemplates()
-		target.getPDBs()
+		print("Target:",target)
+		print()
+		print(target.getTemplates())
+		print(target.getPDBs())
+		target.alignPDB()
 
 if __name__ == "__main__":
 	# RUN ME
