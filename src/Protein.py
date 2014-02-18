@@ -552,14 +552,14 @@ class Protein:
 			i_residue += 1
 			for atom in res:
 				i_atom += 1
-				lines.append('ATOM  %5d %4s%c%3s %1s%4d%1s   %8.3f%8.3f%8.3f%6.2f%6.2f          %2s%2s' % (
+				lines.append('ATOM  %5d %4s%c%3s %c%4d%c   %8.3f%8.3f%8.3f%6.2f%6.2f          %2s%2s\n' % (
 					i_atom,atom.atomName,atom.altLoc,atom.resName,atom.chainId,i_residue,atom.codeForInsertion,
 					atom.xcoord,atom.ycoord,atom.zcoord,atom.occ,atom.temp,atom.elemSym,atom.charge
 				))
 
 		fname = '%s/%s.pdb' % (self.targetsfolder,self.pid)
 		if not os.path.exists(fname):
-			f = open(fname,'wb',1)
+			f = open(fname,'w')
 			f.writelines(lines)
 			f.close()
 
