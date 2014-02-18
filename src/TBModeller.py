@@ -52,7 +52,7 @@ if __name__ == "__main__":
 			for line in f:
 				# Check format, use residue lines only
 				if re.match("TARGET",line):
-					id = line.split('\t')[1]
+					id = line.strip().split('\t')[1].strip()
 				if not re.search("\w\s\w\s\d+",line):
 					continue
 				sequence.append(line.split('\t')[0])

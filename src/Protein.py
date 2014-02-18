@@ -26,6 +26,7 @@ import time
 import re
 import sys
 import json
+import copy
 
 rcsb_url = 'http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&structureId=%s'  ## PDB website
 
@@ -335,7 +336,7 @@ class Protein:
 	def alignPDB(self):
 		# Sort the alignments by similarity
 		alignments = self.alignments
-		alignments.sort(key = lambda a: a.score)
+		alignments.sort(key = lambda a: a.score,reverse=True)
 		target = None
 		template = None
 		alignment = None
@@ -537,8 +538,9 @@ class Protein:
 			res = []
 			# Take the atoms from the residue and swap residue names
 			for atom in seq[j][1]:
-				atom.resName = resname
-				res.append(atom)
+				a = copy.copy(atom)
+				a.resName = resname
+				res.append(a)
 			# Append it to the list and increment counters
 			targetseq.append(res)
 			i += 1
@@ -546,10 +548,10 @@ class Protein:
 
 		# Time to make the PDB
 		lines = []
-		lines.append("REMARK Template for target %s".format(self.pid))
+		lines.append("REMARK Template for target %s\n" % (self.pid))
 		i_atom = 0
 		i_residue = 0
-		for resname,res in seq:
+		for res in targetseq:
 			i_residue += 1
 			for atom in res:
 				i_atom += 1
