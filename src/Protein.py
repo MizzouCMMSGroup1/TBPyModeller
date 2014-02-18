@@ -50,7 +50,8 @@ amino3to1 = {
 	"TRP":"W",
 	"TYR":"Y",
 	"VAL":"V",
-	"MYL":"X"
+	"MYL":"X",
+	"---":"-"
 }
 amino1to3 = {
 	"A":"ALA",
@@ -73,7 +74,8 @@ amino1to3 = {
 	"W":"TRP",
 	"Y":"TYR",
 	"V":"VAL",
-	"X":"MYL"
+	"X":"MYL",
+	"-":"---"
 }
 
 class Protein:
@@ -173,18 +175,17 @@ class Protein:
 						template=hsp.sbjct,templatestart=hsp.sbjct_start,length=length
 					)
 					# Alignment isn't necessarily the same size as the sequence
-					targetfront = ['_']*(a.targetstart-1)
-					targetend = ['_']*(self.seq.length-(a.targetstart+a.length))
-					a.target = targetfront + a.target + targetend
+					targetfront = str(self.seq[:(a.targetstart-1)])
+					targetend = str(self.seq[(len(self.seq)-(a.targetstart+a.length)):])
+					a.target = ''.join(targetfront) + a.target + ''.join(targetend)
 					a.length = len(a.target)
 					
-					templatefront = ['_']*(a.templatestart-1)
-					templateend = ['_']*(self.seq.length-(a.templatestart+a.length))
-					a.template = templatefront + a.template + templateend
+					templatefront = ['-']*(a.targetstart-1)
+					templateend = ['-']*(len(self.seq)-(a.targetstart+a.length))
+					a.template = ''.join(templatefront) + a.template + ''.join(templateend)
 
 					if self.debug:
-						print("Seq vs Target Length:",self.seq.length,a.length)
-						sys.exit()
+						print("Seq vs Target Length:",len(self.seq),a.length)
 
 					# Append the alignment to the template's alignments
 					self.templates[id].alignments.append(a)
@@ -350,30 +351,123 @@ class Protein:
 			print("Selected Template",alignment.id)
 		# We now have the alignment and the pdb
 		# Convert the pdb to a residue sequence
+		# DO NOT CHANGE THESE
 		seq = []
-		curres = None
+		curres = '---'
 		res = []
 		first = True
+		atomnum = 5
+		resnum = 0
 		for line in pdb.lines:
 			# Decode from byte array
 			line = line.decode()
 			# Grab only ATOM lines
 			if line[:6] == 'ATOM  ':
-				if self.debug:
-					print("Line:",line)
+				# Get the atomname (N,CA,C,O)
+				atomname = line[12:16]
+
+				# First make sure you're only storing N, CA, C and O
+				if atomname not in (' N  ',' CA ',' C  ',' O  '):
+					continue
+
 				# Check to see if residue changed
-				if line[17:20] != curres or line[12:16] == '  N ':
+				if line[17:20] != curres or atomnum > 4:
 					if self.debug:
-						print("New Res:",curres)
+						print("New Res:",curres,"->",line[17:20])
+					# Check to make sure the last residue was complete
+					if atomnum < 5:
+						# Add on the missing atoms to the residue
+						if atomnum == 1:
+							atom = Atom(atomName=' N  ',resName=curres)
+							res.append(atom)
+							atomnum += 1
+						if atomnum == 2:
+							atom = Atom(atomName=' CA ',resName=curres)
+							res.append(atom)
+							atomnum += 1
+						if atomnum == 3:
+							atom = Atom(atomName=' C  ',resName=curres)
+							res.append(atom)
+							atomnum += 1
+						if atomnum == 4:
+							atom = Atom(atomName=' O  ',resName=curres)
+							res.append(atom)
+							atomnum += 1
 					# Append the residue to the sequence
 					if res: seq.append((amino3to1[curres],res))
+
+					# If this is the first atom fill in the blanks from the PDB
+					if first:
+						first = False
+						if self.debug:
+							print("Starting resnum:",int(line[22:26]))
+						# Residue number of first residue in PDB
+						for k in range(1,int(line[22:26])):
+							resname = '---'
+							res = []
+							res.append(Atom(atomName=' N  ',resName=resname))
+							res.append(Atom(atomName=' CA ',resName=resname))
+							res.append(Atom(atomName=' C  ',resName=resname))
+							res.append(Atom(atomName=' O  ',resName=resname))
+							seq.append((amino3to1[resname],res))
+						# Decrement resnum by one to mimic the last res not in the PDB
+						resnum = int(line[22:26])-1
+
+					# Check for resnum increment so we don't miss residues
+					resinc = int(line[22:26])-resnum
+					if resinc != 1:
+						print("Resiude skip:",resnum,"->",int(line[22:26]))
+						for k in range(1,resinc):
+							resname = '---'
+							res = []
+							res.append(Atom(atomName=' N  ',resName=resname))
+							res.append(Atom(atomName=' CA ',resName=resname))
+							res.append(Atom(atomName=' C  ',resName=resname))
+							res.append(Atom(atomName=' O  ',resName=resname))
+							seq.append((amino3to1[resname],res))
+
 					# Reset the residue
 					res = []
+					# Store residue numbers
+					resnum = int(line[22:26])
+					# Store the atom number
+					atomnum = 1
+
 				# Make sure current residue name is set
 				curres = line[17:20]
-				# Store off the atom information
+
+				'''
+				if self.debug:
+					print("Line:",line)
+				'''
+
+				# Check to make sure the right atom is being stored
+				if atomnum == 1:
+					if atomname != ' N  ':
+						atom = Atom(atomName=' N  ',resName=curres)
+						res.append(atom)
+						atomnum += 1
+				if atomnum == 2:
+					if atomname != ' CA ':
+						atom = Atom(atomName=' CA ',resName=curres)
+						res.append(atom)
+						atomnum += 1
+				if atomnum == 3:
+					if atomname != ' C  ':
+						atom = Atom(atomName=' C  ',resName=curres)
+						res.append(atom)
+						atomnum += 1
+				if atomnum == 4:
+					if atomname != ' O  ':
+						atom = Atom(atomName=' O  ',resName=curres)
+						res.append(atom)
+						atomnum += 1
+						continue
+				if atomnum > 4:
+					continue
+				# Store off the atom information if valid
 				atom = Atom(
-					atomName=line[12:16],
+					atomName=atomname,
 					altLoc=line[16],
 					resName=line[17:20],
 					chainId=line[21],
@@ -388,20 +482,7 @@ class Protein:
 				)
 				# And add it to the residue (in the proper order)
 				res.append(atom)
-
-				# If this is the first atom fill in the blanks from the PDB
-				if first:
-					first = False
-					# Residue number of first residue in PDB
-					blanks = int(line[22:26])
-					for k in range(1,blanks):
-						resname = '_'
-						res = []
-						res.append(Atom(atomName=' N  ',resName=resname))
-						res.append(Atom(atomName=' CA ',resName=resname))
-						res.append(Atom(atomName=' C  ',resName=resname))
-						res.append(Atom(atomName=' O  ',resName=resname))
-						seq.append((resname,res))
+				atomnum += 1
 
 		# Add the final residue to the sequence
 		seq.append((amino3to1[curres],res))
@@ -424,7 +505,7 @@ class Protein:
 
 			# Template has a blank
 			# Fill in blank data for that residue
-			if '_' == template[i]:
+			if '-' == template[i]:
 				resname = amino1to3[target[i]]
 				res = []
 				res.append(Atom(atomName=' N  ',resName=resname))
@@ -436,12 +517,12 @@ class Protein:
 				continue
 			# Target has a blank
 			# Skip that line
-			if '_' == target[i]:
+			if '-' == target[i]:
 				i += 1
 				j += 1
 				continue
 			# PDB doesn't match template sequence ERROR
-			if seq[j][0] != '_' and template[i] != seq[j][0]:
+			if seq[j][0] != '-' and template[i] != seq[j][0]:
 				raise BaseException("Template doesn't match PDB: (%04d)%c - (%04d)%c" % (i,template[i],j,seq[j][0]))
 
 			# Everything lines up!
