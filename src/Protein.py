@@ -175,8 +175,8 @@ class Protein:
 						template=hsp.sbjct,templatestart=hsp.sbjct_start,length=length
 					)
 					# Alignment isn't necessarily the same size as the sequence
-					targetfront = str(self.seq[:(a.targetstart-1)])
-					targetend = str(self.seq[(len(self.seq)-(a.targetstart+a.length)):])
+					targetfront = str(self.seq[:a.targetstart-1])
+					targetend = str(self.seq[(a.targetstart+a.length):])
 					a.target = ''.join(targetfront) + a.target + ''.join(targetend)
 					a.length = len(a.target)
 					
@@ -367,13 +367,15 @@ class Protein:
 				atomname = line[12:16]
 
 				# First make sure you're only storing N, CA, C and O
-				if atomname not in (' N  ',' CA ',' C  ',' O  '):
+				if atomname not in (' N  ',' CA ',' C  ',' O  ') or line[16] not in (' ','A'):
 					continue
 
 				# Check to see if residue changed
 				if line[17:20] != curres or atomnum > 4:
 					if self.debug:
-						print("New Res:",curres,"->",line[17:20])
+						print("%8s%8s%8s%8s" % ('CURRES','NEWRES','RESNUM','ATONUM'))
+						print("%8s%8s%8d%8d" % (curres,line[17:20],resnum,atomnum))
+						print(line)
 					# Check to make sure the last residue was complete
 					if atomnum < 5:
 						# Add on the missing atoms to the residue
@@ -416,7 +418,8 @@ class Protein:
 					# Check for resnum increment so we don't miss residues
 					resinc = int(line[22:26])-resnum
 					if resinc != 1:
-						print("Resiude skip:",resnum,"->",int(line[22:26]))
+						if self.debug:
+							print("Resiude skip:",resnum,"->",int(line[22:26]))
 						for k in range(1,resinc):
 							resname = '---'
 							res = []
@@ -498,10 +501,10 @@ class Protein:
 		j = 0 # seq
 		targetseq = [] # final sequence
 		if self.debug:
-			print("%8s%8s%8s" % ("TARGET","TEMPLATE","PDB"))
+			print("%4s%4s%10s%10s%10s" % ("i","j","TARGET","TEMPLATE","PDB"))
 		while i < len(template) and j < len(seq):
 			if self.debug:
-				print("%8s%8s%8s" % (target[i],template[i],seq[j][0]))
+				print("%4d%4d%10s%10s%10s" % (i,j,target[i],template[i],seq[j][0]))
 
 			# Template has a blank
 			# Fill in blank data for that residue
@@ -514,6 +517,8 @@ class Protein:
 				res.append(Atom(atomName=' O  ',resName=resname))
 				targetseq.append(res)
 				i += 1
+				if '-' == seq[j][0]:
+					j += 1
 				continue
 			# Target has a blank
 			# Skip that line
@@ -523,7 +528,7 @@ class Protein:
 				continue
 			# PDB doesn't match template sequence ERROR
 			if seq[j][0] != '-' and template[i] != seq[j][0]:
-				raise BaseException("Template doesn't match PDB: (%04d)%c - (%04d)%c" % (i,template[i],j,seq[j][0]))
+				print("Template doesn't match PDB: (%04d)%c - (%04d)%c" % (i,template[i],j,seq[j][0]))
 
 			# Everything lines up!
 			# Copy over the data
@@ -543,11 +548,11 @@ class Protein:
 		lines.append("REMARK Template for target %s".format(self.pid))
 		i_atom = 0
 		i_residue = 0
-		for res in seq:
+		for resname,res in seq:
 			i_residue += 1
 			for atom in res:
 				i_atom += 1
-				lines.append('ATOM  %5d %4s%c%3s %c%4d%c   %8.3f%8.3f%8.3f%6.2f%6.2f          %2s%2s' % (
+				lines.append('ATOM  %5d %4s%c%3s %1s%4d%1s   %8.3f%8.3f%8.3f%6.2f%6.2f          %2s%2s' % (
 					i_atom,atom.atomName,atom.altLoc,atom.resName,atom.chainId,i_residue,atom.codeForInsertion,
 					atom.xcoord,atom.ycoord,atom.zcoord,atom.occ,atom.temp,atom.elemSym,atom.charge
 				))

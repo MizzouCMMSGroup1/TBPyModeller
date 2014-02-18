@@ -10,9 +10,9 @@ from ModObj import ModObj
 
 class Atom(ModObj):
 
-	def __init__(self,atomName=None,altLoc=None,resName=None,chainId=None,
-		codeForInsertion=None,xcoord='0000.000',ycoord='0000.000',zcoord='0000.000',
-		occ='000.00',temp='000.00',elemSym=None,charge=None):
+	def __init__(self,atomName='    ',altLoc=' ',resName='---',chainId=' ',
+		codeForInsertion=' ',xcoord=0.0,ycoord=0.0,zcoord=0.0,
+		occ=0.0,temp=0.0,elemSym='  ',charge='  '):
 		self.atomName = atomName
 		self.altLoc = altLoc
 		self.resName = resName
