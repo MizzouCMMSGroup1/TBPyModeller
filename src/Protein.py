@@ -347,6 +347,7 @@ class Protein:
 				target = a.target
 				template = a.template
 				pdb = self.pdbs[a.id]
+				break
 		if self.debug:
 			print("Selected Template",alignment.id)
 		# We now have the alignment and the pdb
@@ -378,21 +379,21 @@ class Protein:
 						print(line)
 					# Check to make sure the last residue was complete
 					if atomnum < 5:
-						# Add on the missing atoms to the residue
+						# Add on the missing atoms to the end of the residue
 						if atomnum == 1:
-							atom = Atom(atomName=' N  ',resName=curres)
+							atom = Atom(atomName=' N  ',resName=curres,elemSym=' N')
 							res.append(atom)
 							atomnum += 1
 						if atomnum == 2:
-							atom = Atom(atomName=' CA ',resName=curres)
+							atom = Atom(atomName=' CA ',resName=curres,elemSym=' C')
 							res.append(atom)
 							atomnum += 1
 						if atomnum == 3:
-							atom = Atom(atomName=' C  ',resName=curres)
+							atom = Atom(atomName=' C  ',resName=curres,elemSym=' C')
 							res.append(atom)
 							atomnum += 1
 						if atomnum == 4:
-							atom = Atom(atomName=' O  ',resName=curres)
+							atom = Atom(atomName=' O  ',resName=curres,elemSym=' O')
 							res.append(atom)
 							atomnum += 1
 					# Append the residue to the sequence
@@ -407,10 +408,10 @@ class Protein:
 						for k in range(1,int(line[22:26])):
 							resname = '---'
 							res = []
-							res.append(Atom(atomName=' N  ',resName=resname))
-							res.append(Atom(atomName=' CA ',resName=resname))
-							res.append(Atom(atomName=' C  ',resName=resname))
-							res.append(Atom(atomName=' O  ',resName=resname))
+							res.append(Atom(atomName=' N  ',resName=resname,elemSym=' N'))
+							res.append(Atom(atomName=' CA ',resName=resname,elemSym=' C'))
+							res.append(Atom(atomName=' C  ',resName=resname,elemSym=' C'))
+							res.append(Atom(atomName=' O  ',resName=resname,elemSym=' O'))
 							seq.append((amino3to1[resname],res))
 						# Decrement resnum by one to mimic the last res not in the PDB
 						resnum = int(line[22:26])-1
@@ -423,10 +424,10 @@ class Protein:
 						for k in range(1,resinc):
 							resname = '---'
 							res = []
-							res.append(Atom(atomName=' N  ',resName=resname))
-							res.append(Atom(atomName=' CA ',resName=resname))
-							res.append(Atom(atomName=' C  ',resName=resname))
-							res.append(Atom(atomName=' O  ',resName=resname))
+							res.append(Atom(atomName=' N  ',resName=resname,elemSym=' N'))
+							res.append(Atom(atomName=' CA ',resName=resname,elemSym=' C'))
+							res.append(Atom(atomName=' C  ',resName=resname,elemSym=' C'))
+							res.append(Atom(atomName=' O  ',resName=resname,elemSym=' O'))
 							seq.append((amino3to1[resname],res))
 
 					# Reset the residue
@@ -447,22 +448,22 @@ class Protein:
 				# Check to make sure the right atom is being stored
 				if atomnum == 1:
 					if atomname != ' N  ':
-						atom = Atom(atomName=' N  ',resName=curres)
+						atom = Atom(atomName=' N  ',resName=curres,elemSym=' N')
 						res.append(atom)
 						atomnum += 1
 				if atomnum == 2:
 					if atomname != ' CA ':
-						atom = Atom(atomName=' CA ',resName=curres)
+						atom = Atom(atomName=' CA ',resName=curres,elemSym=' C')
 						res.append(atom)
 						atomnum += 1
 				if atomnum == 3:
 					if atomname != ' C  ':
-						atom = Atom(atomName=' C  ',resName=curres)
+						atom = Atom(atomName=' C  ',resName=curres,elemSym=' C')
 						res.append(atom)
 						atomnum += 1
 				if atomnum == 4:
 					if atomname != ' O  ':
-						atom = Atom(atomName=' O  ',resName=curres)
+						atom = Atom(atomName=' O  ',resName=curres,elemSym=' O')
 						res.append(atom)
 						atomnum += 1
 						continue
@@ -511,10 +512,10 @@ class Protein:
 			if '-' == template[i]:
 				resname = amino1to3[target[i]]
 				res = []
-				res.append(Atom(atomName=' N  ',resName=resname))
-				res.append(Atom(atomName=' CA ',resName=resname))
-				res.append(Atom(atomName=' C  ',resName=resname))
-				res.append(Atom(atomName=' O  ',resName=resname))
+				res.append(Atom(atomName=' N  ',resName=resname,elemSym=' N'))
+				res.append(Atom(atomName=' CA ',resName=resname,elemSym=' C'))
+				res.append(Atom(atomName=' C  ',resName=resname,elemSym=' C'))
+				res.append(Atom(atomName=' O  ',resName=resname,elemSym=' O'))
 				targetseq.append(res)
 				i += 1
 				if '-' == seq[j][0]:
