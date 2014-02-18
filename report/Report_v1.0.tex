@@ -34,7 +34,7 @@
 \maketitle
 
 \section{Abstract}
-We implement basic homology (template) modeling of a DNA protein from CASP, T0644.  First, we search (BLAST) for templates that match our sequence.  Then, we align (BLOSUM62) our target sequence with the best template (3U1W).  Next, we build a copy of the the first protein's backbone using the template data wherever possible (our custom python tool).  Then, we fill in the gaps in our backbone using loop modeling (SCWRL) to produce a candidate PDB file.  Finally, we optimize (3D-Refine) our machine-generated PDB file.  Ultimately, we visualize (PyMOL) our results against the known structure of the protein and discuss how to improve our method.
+We implement basic homology (template) modeling of a DNA protein from CASP, T0644.  First, we search (BLAST), find the best candidate template, and align it with our target sequence.  Next, we build a copy of the the target protein's backbone using the template data wherever possible (our custom python tool).  Then, we add sidechains (SCWRL) to produce a candidate PDB file.  Finally, we optimize (3D-Refine) our machine-generated PDB file.  Ultimately, we visualize (PyMOL) our results against the known structure of the protein and discuss how to improve our method.
 
 \section{Introduction}
 
