@@ -16,7 +16,7 @@ from Bio.SeqRecord import SeqRecord
 
 import sys
 import re
-import 
+import os
 
 targets = []
 
