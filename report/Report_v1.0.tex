@@ -68,8 +68,13 @@ Critical Assessment of Techniques for Protein Structure Prediction (CASP) is a c
 The Protein Data Bank (PDB) is a repository for the collection, data processing and dissemination of the three-dimensional data on macromolecular structure, such as proteins and nucleic acids. The PDB is overseen by the Worldwide Protein Data Bank (wwPDB). It is a crucial resource for scientists nowadays who work in the area of structural biology as most major scientific journals require them to submit their data to the PDB. The structural data are commonly collected by X-ray crystallography or NMR spectroscopy and submitted by biologists and biochemists all over the world. These data can be freely and publically accessed by the global community on the Internet via the websites of its member organizations (PDBe, PDBj, and RCSB). 
 
 \section{Building a protein}
+
+The majority of the project centers around creating the structure of the target protein using the template files found in the previous steps. Using a template structure and its alignment with the target we are able to confidently create a structure for the target which is close to native.
 \subsection{Algorithm}
 
+The structure is created by using an alignment file and a structure file to create a structure for the target. Under optimal circumstances there will be no difference in length between the target and template. However this is not always the case, so it is important to pad the front and back of the template's alignment and structure with blank residues. This is recorded as a single dash, -, in the alignment and a triple dash, ---, in the structure. The structure is preprocessed and reduced down to a series of residues, each containing 4 atoms: N, CA, C, O. Residue names are changed from legnth 3 to length 1 so as to facilitate alignment checking between the template's alignment and structure.(link to PDBtoStructure code in supporting documents from the doc folder)
+
+Once the preprocessing is complete the alignment and structure can be used to create the target's structure. (this is the BuildStructure code in the doc folder)
 \section{Optimization and sidechains}
 
 \subsection{SCWRL}
