@@ -38,7 +38,7 @@ echo Testing FASTA File
 
 python TBModeller.py testdata\T0644.fasta
 
-pause
+GOTO Jmol
 
 GOTO Finished
 
@@ -51,6 +51,18 @@ echo Testing Multiple DR Files
 python TBModeller.py testdata\T0644.dr testdata\T0645.dr testdata\T0648.dr
 
 pause
+
+GOTO Finished
+
+
+
+:Jmol
+
+echo Visualizing Model
+
+REM Start Jmol
+
+java -Xmx512m -jar "C:\Jmol\Jmol.jar" targets\T0644_chain.pdb
 
 GOTO Finished
 
