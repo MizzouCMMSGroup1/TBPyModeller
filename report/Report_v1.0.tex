@@ -272,7 +272,7 @@ BuildStructure(target,template,structure):
 
 \subsection{SCWRL}
 
-Finally, we run our candidate PDB file through SCWRL, a program for adding sidechains to a protein backbone.  SCWRL4 is based on an improved graph theory algorithms that solve the combinatorial problem in side-chain prediction more rapidly than many other available programs.\\
+Next, we run our candidate PDB file through SCWRL, a program for adding sidechains to a protein backbone.  SCWRL4 is based on an improved graph theory algorithms that solve the combinatorial problem in side-chain prediction more rapidly than many other available programs.\\
 
 SCWRL4 is based on a new potential function that results in improved accuracy at reasonable speed.It will converge on very large proteins or protein complexes or those with very dense interaction graphs.It depends on a backbone-dependent rotamer library. The library provides lists of chi1-chi2-chi3-chi4 values and their relative probabilities for residues at given phi-psi values, and explores these conformations to minimize sidechain-backbone clashes and sidechain-sidechain clashes.\\
 
@@ -280,13 +280,12 @@ The SCWRL4 executable saves the resolved optimal conformation of the whole prote
 
 \subsection{3DRefine}
 
-Next, we used a two-step refinement protocol, called 3Drefine, to consistently bring the initial model closer to the native structure.  One of the major limitations of computational protein structure prediction is the deviation of predicted models from their experimentally derived true, native structures.  The first step is based on optimization of hydrogen bonding (HB) network and the second step applies atomic-level energy minimization on the optimized model using a composite physics and knowledge-based force fields. The approach has been evaluated on the CASP benchmark data and it exhibits consistent improvement over the initial structure in both global and local structural quality measures. 3Drefine method is also computationally inexpensive, consuming only few minutes of CPU time to refine a protein of typical length (300 residues).
+Finally, we used a two-step refinement protocol, called 3Drefine, to consistently bring the initial model closer to the native structure.  One of the major limitations of computational protein structure prediction is the deviation of predicted models from their experimentally derived true, native structures.  The first step is based on optimization of hydrogen bonding (HB) network and the second step applies atomic-level energy minimization on the optimized model using a composite physics and knowledge-based force fields. The approach has been evaluated on the CASP benchmark data and it exhibits consistent improvement over the initial structure in both global and local structural quality measures. 3Drefine method is also computationally inexpensive, consuming only few minutes of CPU time to refine a protein of typical length (300 residues).
 
+\newpage
 \section{Visualization}
 
 After we obtain final target PDB file, we use Jmol to visualize it. At the same time, we also visualize the native one to compare it with our prediction.  The left one is a target structure we generated (T0644), while right one is the native structure.
-
-\subsection{Visualizations}
 
 \begin{figure}
 \centering
