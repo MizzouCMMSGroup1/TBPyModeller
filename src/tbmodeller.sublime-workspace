@@ -3,6 +3,30 @@
 	{
 		"selected_items":
 		[
+			[
+				"templat",
+				"templatestart"
+			],
+			[
+				"targ",
+				"targetfolder"
+			],
+			[
+				"resname",
+				"resname"
+			],
+			[
+				"amino",
+				"amino1to3"
+			],
+			[
+				"alignmen",
+				"alignmentsfolder"
+			],
+			[
+				"fast",
+				"fastasfolder"
+			]
 		]
 	},
 	"buffers":
@@ -11,16 +35,8 @@
 			"file": "Protein.py",
 			"settings":
 			{
-				"buffer_size": 293,
+				"buffer_size": 16067,
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "testdata/T0644.dr",
-			"settings":
-			{
-				"buffer_size": 1247,
-				"line_ending": "Unix"
 			}
 		},
 		{
@@ -40,10 +56,18 @@
 			}
 		},
 		{
+			"file": "/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/.gitignore",
+			"settings":
+			{
+				"buffer_size": 393,
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "TBModeller.py",
 			"settings":
 			{
-				"buffer_size": 1020,
+				"buffer_size": 1635,
 				"line_ending": "Windows"
 			}
 		},
@@ -51,9 +75,26 @@
 			"file": "runner.bat",
 			"settings":
 			{
-				"buffer_size": 423,
+				"buffer_size": 861,
 				"line_ending": "Windows",
 				"name": "@TBModeller Test Runner"
+			}
+		},
+		{
+			"contents": "-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n-\n\n-------------------------\n\n-----------------------GDDDDTGYLPPSQAIQDALXXLYPNATAIXWEQXGVYYVADCQADGREXEVWFDANANWLXTETELNSINNLPPAVLTAFXESSYNNWVVDDVVILEYPNEPSTEFVVTVEQGXXVDLYFSEGGGLLHEXDVTNGDDTHWPRV\nMKFLKFSLLTAVLLSVVFAFSSCGDDDDTGYLPPSQAIQDALKKLYPNATAIKWEQKGVYYVADCQADGREKEVWFDANANWLMTETELNSINNLPPAVLTAFMESSYNNWVVDDVVILEYPNEPSTEFVVTVEQGKKVDLYFSEGGGLLHEKDVTNGDDTHWPRV\nMKFLKFSLLTAVLLSVVFAFSSCGDDDDTGYLPPSQAIQDALKKLYPNATAIKWEQKGVYYVADCQADGREKEVWFDANANWLMTETELNSINNLPPAVLTAFMESSYNNWVVDDVVILEYPNEPSTEFVVTVEQGKKVDLYFSEGGGLLHEKDVTNGDDTHWPRV",
+			"settings":
+			{
+				"buffer_size": 624,
+				"line_ending": "Windows",
+				"name": "-"
+			}
+		},
+		{
+			"file": "Atom.py",
+			"settings":
+			{
+				"buffer_size": 640,
+				"line_ending": "Windows"
 			}
 		}
 	],
@@ -85,6 +126,47 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/report/Report_v1.0.tex",
+		"/C/Jmol/LEAME.txt",
+		"/C/Jmol/README.txt",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/hhsuite-2.0.9/scripts/hhmakemodel.pl",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/PDB.py",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/Alignment.py",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/Template.py",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/ModObj.py",
+		"/C/FCCC/Scwrl4/Scwrl4.ini",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/templates-T0644/4FR9_A.pdb",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/Tools/Score_Function/TMscore",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/tmp",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/alignments-T0644/4FR9_A-0.alignment",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/alignments-T0644/4IPB_A-1.alignment",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/fastas-T0644/4FR9_A.fasta",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/testdata/T0644.fasta",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/data/examples/4FR9.pdb",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/testdata/T0644.dr",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/testdata/T0644.pdb",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/templates-T0644/3U1W_A.pdb",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/hhsuite-2.0.9/src/hhsearch.C",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/alignments-T0644/4HBR_A-0.alignment",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/alignments-T0644/2BWM_A-0.alignment",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/templates-T0644/2BWM_A.pdb",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/fastas-T0644/2BWM_A.fasta",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/hhsuite-2.0.9/src/hhhmm.C",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/hhsuite-2.0.9/README",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/hhsuite-2.0.9/src/hhfullalignment.C",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/hhsuite-2.0.9/src/hhconsensus.C",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/hhsuite-2.0.9/src/hhblits.C",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/hhsuite-2.0.9/src/hhalign.C",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/hhsuite-2.0.9/src/cs/sequence.h",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/hhsuite-2.0.9/src/hhmake.C",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/hhsuite-2.0.9/src/hhalignment.h",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/hhsuite-2.0.9/src/cs/alignment.h",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/templates-T0644/4FR9.pdb",
+		"/C/Users/Sean/Downloads/4FR9.pdb",
+		"/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/templates-T0644/YP_098548.pdb",
+		"/C/Users/Sean/Downloads/sequence.gbsta.xml",
+		"/C/Python27/README.txt",
+		"/C/Users/Sean/Documents/adults-normalized",
 		"/C/Users/sl7v6/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/testdata/4FR9.fasta.txt",
 		"/C/Users/sl7v6/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/src/testdata/4FR9.pdb",
 		"/C/Users/sl7v6/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/data/Targets/T0644.dr",
@@ -127,7 +209,7 @@
 	],
 	"find":
 	{
-		"height": 23.0
+		"height": 43.0
 	},
 	"find_in_files":
 	{
@@ -141,6 +223,15 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"range(",
+			"debug",
+			"resolution",
+			"(\\w+)\\s(\\w+)",
+			"(\\w)\\s(\\w)",
+			" ",
+			"self.pdb",
+			"ReadAlignment",
+			"WritePairwiseAlignments",
 			"\\n",
 			"status, msg",
 			"msg = response.msg"
@@ -148,9 +239,10 @@
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": false,
+		"regex": true,
 		"replace_history":
 		[
+			"\"\\1\":\"\\2\"",
 			"@mail.missouri.edu\\n",
 			"status, reason",
 			"reason = response.reason"
@@ -173,15 +265,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 293,
+						"buffer_size": 16067,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								292,
-								292
+								13753,
+								9218
 							]
 						],
 						"settings":
@@ -189,7 +281,7 @@
 							"syntax": "Packages/Python/Python.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 6791.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -197,34 +289,6 @@
 				},
 				{
 					"buffer": 1,
-					"file": "testdata/T0644.dr",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1247,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1247,
-								1247
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
 					"file": "testdata/T0644.fasta",
 					"semi_transient": false,
 					"settings":
@@ -248,11 +312,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 2,
 					"file": "testdata/T0644.pdb",
 					"semi_transient": false,
 					"settings":
@@ -264,8 +328,8 @@
 						"selection":
 						[
 							[
-								1846,
-								1846
+								2105,
+								2105
 							]
 						],
 						"settings":
@@ -276,7 +340,35 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/C/Users/Sean/SkyDrive/School/S14-CS8710_CMMS/Group/prj1/.gitignore",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 393,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								350,
+								350
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
 					"type": "text"
 				}
 			]
@@ -291,23 +383,24 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1020,
+						"buffer_size": 1635,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								241,
-								241
+								349,
+								349
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.tmLanguage"
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 80.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -319,15 +412,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 423,
+						"buffer_size": 861,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								400,
-								400
+								781,
+								781
 							]
 						],
 						"settings":
@@ -336,10 +429,67 @@
 							"syntax": "Packages/Batch File/Batch File.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 863.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 624,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								314,
+								314
+							]
+						],
+						"settings":
+						{
+							"auto_name": "-",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 41.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "Atom.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 640,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								592,
+								592
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
 					"type": "text"
 				}
 			]
@@ -394,7 +544,7 @@
 	"project": "tbmodeller.sublime-project",
 	"replace":
 	{
-		"height": 42.0
+		"height": 80.0
 	},
 	"save_all_on_build": true,
 	"select_file":
