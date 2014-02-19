@@ -4,7 +4,9 @@ REM TBModeller Test Runner
 
 echo Running TBModeller.py
 
-GOTO MultiDR
+GOTO SingleFasta
+
+
 
 :SingleSeq
 

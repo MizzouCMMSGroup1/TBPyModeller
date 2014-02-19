@@ -16,6 +16,7 @@ from Bio.SeqRecord import SeqRecord
 
 import sys
 import re
+import 
 
 targets = []
 
@@ -28,6 +29,7 @@ def main():
 		print(target.getTemplates())
 		print(target.getPDBs())
 		target.alignPDB()
+		os.system("Scwrl4 -i targets/%s.pdb -o targets/%s_chain.pdb" % (target,target))
 
 if __name__ == "__main__":
 	# RUN ME

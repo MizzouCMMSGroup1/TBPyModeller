@@ -382,19 +382,19 @@ class Protein:
 					if atomnum < 5:
 						# Add on the missing atoms to the end of the residue
 						if atomnum == 1:
-							atom = Atom(atomName=' N  ',resName=curres,elemSym=' N')
+							atom = Atom(atomName=' N  ',resName=curres,elemSym=' N',missing=True)
 							res.append(atom)
 							atomnum += 1
 						if atomnum == 2:
-							atom = Atom(atomName=' CA ',resName=curres,elemSym=' C')
+							atom = Atom(atomName=' CA ',resName=curres,elemSym=' C',missing=True)
 							res.append(atom)
 							atomnum += 1
 						if atomnum == 3:
-							atom = Atom(atomName=' C  ',resName=curres,elemSym=' C')
+							atom = Atom(atomName=' C  ',resName=curres,elemSym=' C',missing=True)
 							res.append(atom)
 							atomnum += 1
 						if atomnum == 4:
-							atom = Atom(atomName=' O  ',resName=curres,elemSym=' O')
+							atom = Atom(atomName=' O  ',resName=curres,elemSym=' O',missing=True)
 							res.append(atom)
 							atomnum += 1
 					# Append the residue to the sequence
@@ -409,10 +409,10 @@ class Protein:
 						for k in range(1,int(line[22:26])):
 							resname = '---'
 							res = []
-							res.append(Atom(atomName=' N  ',resName=resname,elemSym=' N'))
-							res.append(Atom(atomName=' CA ',resName=resname,elemSym=' C'))
-							res.append(Atom(atomName=' C  ',resName=resname,elemSym=' C'))
-							res.append(Atom(atomName=' O  ',resName=resname,elemSym=' O'))
+							res.append(Atom(atomName=' N  ',resName=resname,elemSym=' N',missing=True))
+							res.append(Atom(atomName=' CA ',resName=resname,elemSym=' C',missing=True))
+							res.append(Atom(atomName=' C  ',resName=resname,elemSym=' C',missing=True))
+							res.append(Atom(atomName=' O  ',resName=resname,elemSym=' O',missing=True))
 							seq.append((amino3to1[resname],res))
 						# Decrement resnum by one to mimic the last res not in the PDB
 						resnum = int(line[22:26])-1
@@ -425,10 +425,10 @@ class Protein:
 						for k in range(1,resinc):
 							resname = '---'
 							res = []
-							res.append(Atom(atomName=' N  ',resName=resname,elemSym=' N'))
-							res.append(Atom(atomName=' CA ',resName=resname,elemSym=' C'))
-							res.append(Atom(atomName=' C  ',resName=resname,elemSym=' C'))
-							res.append(Atom(atomName=' O  ',resName=resname,elemSym=' O'))
+							res.append(Atom(atomName=' N  ',resName=resname,elemSym=' N',missing=True))
+							res.append(Atom(atomName=' CA ',resName=resname,elemSym=' C',missing=True))
+							res.append(Atom(atomName=' C  ',resName=resname,elemSym=' C',missing=True))
+							res.append(Atom(atomName=' O  ',resName=resname,elemSym=' O',missing=True))
 							seq.append((amino3to1[resname],res))
 
 					# Reset the residue
@@ -449,22 +449,22 @@ class Protein:
 				# Check to make sure the right atom is being stored
 				if atomnum == 1:
 					if atomname != ' N  ':
-						atom = Atom(atomName=' N  ',resName=curres,elemSym=' N')
+						atom = Atom(atomName=' N  ',resName=curres,elemSym=' N',missing=True)
 						res.append(atom)
 						atomnum += 1
 				if atomnum == 2:
 					if atomname != ' CA ':
-						atom = Atom(atomName=' CA ',resName=curres,elemSym=' C')
+						atom = Atom(atomName=' CA ',resName=curres,elemSym=' C',missing=True)
 						res.append(atom)
 						atomnum += 1
 				if atomnum == 3:
 					if atomname != ' C  ':
-						atom = Atom(atomName=' C  ',resName=curres,elemSym=' C')
+						atom = Atom(atomName=' C  ',resName=curres,elemSym=' C',missing=True)
 						res.append(atom)
 						atomnum += 1
 				if atomnum == 4:
 					if atomname != ' O  ':
-						atom = Atom(atomName=' O  ',resName=curres,elemSym=' O')
+						atom = Atom(atomName=' O  ',resName=curres,elemSym=' O',missing=True)
 						res.append(atom)
 						atomnum += 1
 						continue
@@ -513,10 +513,10 @@ class Protein:
 			if '-' == template[i]:
 				resname = amino1to3[target[i]]
 				res = []
-				res.append(Atom(atomName=' N  ',resName=resname,elemSym=' N'))
-				res.append(Atom(atomName=' CA ',resName=resname,elemSym=' C'))
-				res.append(Atom(atomName=' C  ',resName=resname,elemSym=' C'))
-				res.append(Atom(atomName=' O  ',resName=resname,elemSym=' O'))
+				res.append(Atom(atomName=' N  ',resName=resname,elemSym=' N',missing=True))
+				res.append(Atom(atomName=' CA ',resName=resname,elemSym=' C',missing=True))
+				res.append(Atom(atomName=' C  ',resName=resname,elemSym=' C',missing=True))
+				res.append(Atom(atomName=' O  ',resName=resname,elemSym=' O',missing=True))
 				targetseq.append(res)
 				i += 1
 				if '-' == seq[j][0]:
@@ -538,9 +538,10 @@ class Protein:
 			res = []
 			# Take the atoms from the residue and swap residue names
 			for atom in seq[j][1]:
-				a = copy.copy(atom)
-				a.resName = resname
-				res.append(a)
+				if not atom.missing:
+					a = copy.copy(atom)
+					a.resName = resname
+					res.append(a)
 			# Append it to the list and increment counters
 			targetseq.append(res)
 			i += 1
@@ -555,16 +556,16 @@ class Protein:
 			i_residue += 1
 			for atom in res:
 				i_atom += 1
-				lines.append('ATOM  %5d %4s%c%3s %c%4d%c   %8.3f%8.3f%8.3f%6.2f%6.2f          %2s%2s\n' % (
-					i_atom,atom.atomName,atom.altLoc,atom.resName,atom.chainId,i_residue,atom.codeForInsertion,
-					atom.xcoord,atom.ycoord,atom.zcoord,atom.occ,atom.temp,atom.elemSym,atom.charge
-				))
+				if not atom.missing:
+					lines.append('ATOM  %5d %4s%c%3s %c%4d%c   %8.3f%8.3f%8.3f%6.2f%6.2f          %2s%2s\n' % (
+						i_atom,atom.atomName,atom.altLoc,atom.resName,atom.chainId,i_residue,atom.codeForInsertion,
+						atom.xcoord,atom.ycoord,atom.zcoord,atom.occ,atom.temp,atom.elemSym,atom.charge
+					))
 
 		fname = '%s/%s.pdb' % (self.targetsfolder,self.pid)
-		if not os.path.exists(fname):
-			f = open(fname,'w')
-			f.writelines(lines)
-			f.close()
+		f = open(fname,'w')
+		f.writelines(lines)
+		f.close()
 
 	def __str__(self):
 		return str(self.pid)
