@@ -15,7 +15,7 @@ Requirements:
 
 To Run:
 =======
-'''
+```
 // Using ID and Sequence  
 $ python TBModeller.py ID Sequence [ID Sequence...]  
 
@@ -34,3 +34,4 @@ C:\\> java -Xmx512m -jar %JMOL_HOME%\Jmol.jar targets\\{targetid}.pdb
 $ export JMOL_HOME="{Jmol Directory Here}"
 // Example: $ export JMOL_HOME="/home/user/Jmol"
 $ java -Xmx512m -jar "$JMOL_HOME/Jmol.jar" targets/{targetid}.pdb
+```
