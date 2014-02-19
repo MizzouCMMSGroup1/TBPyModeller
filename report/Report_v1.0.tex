@@ -54,7 +54,7 @@ For our project, we implemented basic homology modeling in python, using a numbe
 \end{center}
 \end{figure}
 
-\section{Template Search and Alignment}
+\section{Template Search, Alignment and Data}
 
 \subsection{BLAST}
 
@@ -286,7 +286,7 @@ The SCWRL4 executable saves the resolved optimal conformation of the whole prote
 One of the major limitations of computational protein structure prediction is the deviation of predicted models from their experimentally derived true, native structures.
 	We used a two-step refinement protocol, called 3Drefine, to consistently bring the initial model closer to the native structure. The first step is based on optimization of hydrogen bonding (HB) network and the second step applies atomic-level energy minimization on the optimized model using a composite physics and knowledge-based force fields. The approach has been evaluated on the CASP benchmark data and it exhibits consistent improvement over the initial structure in both global and local structural quality measures. 3Drefine method is also computationally inexpensive, consuming only few minutes of CPU time to refine a protein of typical length (300 residues).
 
-\section{Visualization and results}
+\section{Visualization}
 
    After we obtain final target pdb file, we use Jmol to visualize it. At the same time, we also visualize the native one to compare it with our prediction.\\\\
 Jmol is an open-source Java viewer for chemical structures in 3D, that does not require 3D acceleration plugins. It is cross-platform, running on Windows, Mac OS X, and Linux/Unix systems. The JmolApplet is a web applet that can be integrated into web pages. The Jmol application is a standard application based on Java which can be run on the desktop. The JmolViewer is a development tool kit that can be integrated into other Java application. Besides, Jmol has many interesting features like Animation, Surfaces, Measurements and so on. With these features, we can fulfill many requirements of our visualization task. In addition, Jmol can not only accept PDB file format, but also MOL, XYZ, CIF file formats. Jmol is available here: http://jmol.sourceforge.net/.\\\\
@@ -328,15 +328,34 @@ Our results are shown in the following table. From the table, we can clearly see
     \end{tabular}
 \end{center}
 
-\subsection{Citations}
+\section{Citations}
 
-Biopython citation\\
-Blast citation\\
-Casp\\
-PDB citation\\
-3DRefine paper\\
-SCWRL paper\\
-jMol/PyMol citations\\
+We thank the following tools and papers: \\\\
+
+Cock PJ, Antao T, Chang JT, Chapman BA, Cox CJ, Dalke A, Friedberg I, Hamelryck T, Kauff F, Wilczynski B, and de Hoon MJ. Biopython: freely available Python tools for computational molecular biology and bioinformatics. Bioinformatics 2009 Jun 1; 25(11) 1422-3.\\\\
+
+Blast:  Altschul S.F., Gish W., Miller W., Myers E.W. and Lipman D.J. (1990)
+Basic local alignment search tool.  J. Mol. Biol. 215: 403-410.\\\\
+
+CASP: Critical Assessment of Techniques for Protein Structure Prediction.\\
+http://predictioncenter.org/casp10/ \\\\
+
+PDB ID: 102l.
+D.W.Heinz, W.A.Baase, F.W.Dahlquist, B.W.Matthews, "How Amino-Acid Insertions are Allowed in an Alpha-Helix of T4 Lysozyme," Nature, 361 (1993): 561.\\\\
+
+D. Bhattacharya and J. Cheng: 3Drefine: Consistent Protein Structure Refinement by Optimizing Hydrogen-Bonding Network and Atomic-Level Energy Minimization.
+Proteins: Structure, Function and Bioinformatics. 2012 (In Press).\\\\
+
+G. G. Krivov, M. V. Shapovalov, and R. L. Dunbrack, Jr. Improved prediction of protein side-chain conformations with SCWRL4. Proteins (2009).\\\\
+
+Jmol: an open-source Java viewer for chemical structures in 3D. http://www.jmol.org/ \\\\
+
+Y. Zhang, J. Skolnick, Scoring function for automated assessment of protein structure template quality, Proteins, 2004 57: 702-710
+J. Xu, Y. Zhang, How significant is a protein structure similarity with TM-score=0.5? Bioinformatics, 2010 26, 889-895\\\\
+
+Hurley JR and Cattell RB (1962). "The Procrustes Program: Producing direct rotation to test a hypothesized factor structure". Behavioral Science 7 (2): 258–262.\\\\
+
+Petitjean M (1999). "On the Root Mean Square quantitative chirality and quantitative symmetry measures". Journal of Mathematical Physics 40 (9): 4587–4595\\\\
 
 \end{document}
 
