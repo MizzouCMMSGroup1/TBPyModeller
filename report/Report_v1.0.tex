@@ -14,7 +14,8 @@
 \usepackage{empheq}
 \usepackage{algorithm,algpseudocode}
 \usepackage[margin=1.5in]{geometry}
-
+\usepackage{listings}
+\lstset{language=Python} 
 
 \usepackage{listings}
 \usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
@@ -70,11 +71,204 @@ The Protein Data Bank (PDB) is a repository for the collection, data processing 
 \section{Building a protein}
 
 The majority of the project centers around creating the structure of the target protein using the template files found in the previous steps. Using a template structure and its alignment with the target we are able to confidently create a structure for the target which is close to native.
-\subsection{Algorithm}
+\subsection{Algorithm - PDB to Structure}
 
 The structure is created by using an alignment file and a structure file to create a structure for the target. Under optimal circumstances there will be no difference in length between the target and template. However this is not always the case, so it is important to pad the front and back of the template's alignment and structure with blank residues. This is recorded as a single dash, -, in the alignment and a triple dash, ---, in the structure. The structure is preprocessed and reduced down to a series of residues, each containing 4 atoms: N, CA, C, O. Residue names are changed from legnth 3 to length 1 so as to facilitate alignment checking between the template's alignment and structure.(link to PDBtoStructure code in supporting documents from the doc folder)
 
-Once the preprocessing is complete the alignment and structure can be used to create the target's structure. (this is the BuildStructure code in the doc folder)
+\newpage
+\subsection{Python - PDB to Structure}
+\begin{lstlisting}
+##NOTE: all calls to Atom in this code will need:
+## ", missing=True" as a final argument, omitted for clarity
+PDBtoStructure:
+seq = []
+curres = '---'
+res = []
+first = True
+atomnum = 5
+resnum = 0
+for line in pdb.lines:
+    # Decode from byte array
+    line = line.decode()
+    # Grab only ATOM lines
+    if line[:6] == 'ATOM    ':
+# Get the atomname (N,CA,C,O)
+atomname = line[12:16]
+
+# First make sure you're only storing N, CA, C and O
+if atomname not in (' N    ',' CA ',' C    ',' O    ') \
+    or line[16] not in (' ','A'):
+    continue
+
+# Check to see if residue changed
+if line[17:20] != curres or atomnum > 4:
+    if self.debug:
+print("%8s%8s%8s%8s" % ('CURRES','NEWRES','RESNUM','ATONUM'))
+print("%8s%8s%8d%8d" % (curres,line[17:20],resnum,atomnum))
+print(line)
+    # Check to make sure the last residue was complete
+    if atomnum < 5:
+# Add on the missing atoms to the end of the residue
+if atomnum == 1:
+    atom = Atom(atomName=' N    ',resName=curres,elemSym=' N')
+    res.append(atom)
+    atomnum += 1
+if atomnum == 2:
+    atom = Atom(atomName=' CA ',resName=curres,elemSym=' C')
+    res.append(atom)
+    atomnum += 1
+if atomnum == 3:
+    atom = Atom(atomName=' C    ',resName=curres,elemSym=' C')
+    res.append(atom)
+    atomnum += 1
+if atomnum == 4:
+    atom = Atom(atomName=' O    ',resName=curres,elemSym=' O')
+    res.append(atom)
+    atomnum += 1
+    # Append the residue to the sequence
+    if res: seq.append((amino3to1[curres],res))
+
+    # If this is the first atom fill in the blanks from the PDB
+    if first:
+first = False
+if self.debug:
+    print("Starting resnum:",int(line[22:26]))
+# Residue number of first residue in PDB
+for k in range(1,int(line[22:26])):
+    resname = '---'
+    res = []
+    res.append(Atom(atomName=' N    ',resName=resname,elemSym=' N'))
+    res.append(Atom(atomName=' CA ',resName=resname,elemSym=' C'))
+    res.append(Atom(atomName=' C    ',resName=resname,elemSym=' C'))
+    res.append(Atom(atomName=' O    ',resName=resname,elemSym=' O'))
+    seq.append((amino3to1[resname],res))
+# Decrement resnum by one to mimic the last res not in the PDB
+resnum = int(line[22:26])-1
+
+    # Check for resnum increment so we don't miss residues
+    resinc = int(line[22:26])-resnum
+    if resinc != 1:
+if self.debug:
+    print("Resiude skip:",resnum,"->",int(line[22:26]))
+for k in range(1,resinc):
+    resname = '---'
+    res = []
+    res.append(Atom(atomName=' N    ',resName=resname,elemSym=' N'))
+    res.append(Atom(atomName=' CA ',resName=resname,elemSym=' C'))
+    res.append(Atom(atomName=' C    ',resName=resname,elemSym=' C'))
+    res.append(Atom(atomName=' O    ',resName=resname,elemSym=' O'))
+    seq.append((amino3to1[resname],res))
+
+    # Reset the residue
+    res = []
+    # Store residue numbers
+    resnum = int(line[22:26])
+    # Store the atom number
+    atomnum = 1
+
+# Make sure current residue name is set
+curres = line[17:20]
+
+'''
+if self.debug:
+    print("Line:",line)
+'''
+
+# Check to make sure the right atom is being stored
+if atomnum == 1:
+    if atomname != ' N    ':
+atom = Atom(atomName=' N    ',resName=curres,elemSym=' N')
+res.append(atom)
+atomnum += 1
+if atomnum == 2:
+    if atomname != ' CA ':
+atom = Atom(atomName=' CA ',resName=curres,elemSym=' C')
+res.append(atom)
+atomnum += 1
+if atomnum == 3:
+    if atomname != ' C    ':
+atom = Atom(atomName=' C    ',resName=curres,elemSym=' C')
+res.append(atom)
+atomnum += 1
+if atomnum == 4:
+    if atomname != ' O    ':
+atom = Atom(atomName=' O    ',resName=curres,elemSym=' O')
+res.append(atom)
+atomnum += 1
+continue
+if atomnum > 4:
+    continue
+# Store off the atom information if valid
+atom = Atom(
+    atomName=atomname,
+    altLoc=line[16],
+    resName=line[17:20],
+    chainId=line[21],
+    codeForInsertion=line[26],
+    xcoord=float(line[30:38]),
+    ycoord=float(line[38:46]),
+    zcoord=float(line[46:54]),
+    occ=float(line[54:60]),
+    temp=float(line[60:66]),
+    elemSym=line[76:78],
+    charge=line[78:80]
+)
+# And add it to the residue (in the proper order)
+res.append(atom)
+atomnum += 1
+
+# Add the final residue to the sequence
+seq.append((amino3to1[curres],res))
+\end{lstlisting}
+
+\newpage
+\subsection{Algorithm - Structure to PDB}
+
+Once the preprocessing is complete the alignment and structure can be used to create the target's structure.
+
+\subsection{Python - Structure to PDB}
+
+\begin{lstlisting}
+## target := [residue], template := [residue]
+## structure := [(residueName,residue)]
+BuildStructure(target,template,structure):
+	i,j := 0
+	target_structure := []
+	WHILE i < length(target) and j < length(structure):
+		IF template[i] == ‘-‘:
+			# template[i] in alignment is blank
+			# create a residue with blank atoms
+			res := BlankResidue()
+			target_structure.append(res)
+			i++
+			if structure[j][0] == ‘-‘:
+				# structure file missing residue
+				j++
+			continue
+		ENDIF
+		IF target[i] == ‘-‘:
+			# target[i] in alignment is blank
+			i++, j++
+			continue
+		ENDIF
+		# copy the atoms
+		res := copyAtoms(structure[j][1])
+		# change the residue name for atoms
+		changeResidueName(res,target[i])
+		target_structure.append(res)
+		i++, j++
+	ENDWHILE
+	final_structure := []
+	FOR res IN target_structure:
+		FOR atom IN res:
+			IF atom is not blank:
+				 final_structure.append(atom)
+			ENDIF
+		ENDFOR
+	ENDFOR
+\end{lstlisting}
+
+
 \section{Optimization and sidechains}
 
 \subsection{SCWRL}
