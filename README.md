@@ -3,24 +3,31 @@ TBPyModeller
 
 Template Based Modelling of Protein Structures in Python
 
-###Project coordinator:  
-- Xiaokai Qian @qxk2310  
+#####Project coordinator:  
 
-###Team Members:  
-- Caiwei Wang @cwwmoment  
-- Haipei Fan @happyfhp  
-- Puneet Gaddam @pg7b2  
-- Sean Lander @slander36  
-- Brett Koonce @asparagui  
+| Name          | Handle
+|---------------|--------------------------------------
+| Xiaokai Qian  | [qxk2310](https://github.com/qxk2310)
+
+#####Team Members:  
+
+| Name          | Handle                                     
+|---------------|------------------------------------------
+| Caiwei Wang   | [cwwmoment](https://github.com/cwwmoment)
+| Haipei Fan    | [happyfhp](https://github.com/happyfhp)
+| Puneet Gaddam | [pg7b2](https://github.com/pg7b2)
+| Sean Lander   | [slander36](https://github.com/slander36)
+| Brett Koonce  | [asparagui](https://github.com/asparagui)
 
 Requirements:
 =============
-Required:  
+#####Required:  
 * [Python 3.3 32 bit](http://www.python.org/download/)  
 * [Numpy 1.8 for Python 3.3 32 bit](http://www.numpy.org/)  
 * [Biopython 1.63 for Python 3.3 32 bit](http://biopython.org/wiki/Download)  
 * [Scwrl4](http://dunbrack.fccc.edu/scwrl4/)  
-Optional:  
+
+#####Optional:  
 * [Jmol](http://jmol.sourceforge.net/download/)  
 
 To Run:
