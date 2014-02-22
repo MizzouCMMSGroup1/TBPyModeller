@@ -550,12 +550,20 @@ class Protein:
 		# Time to make the PDB
 		lines = []
 		lines.append("REMARK Template for target %s\n" % (self.pid))
+		residues_needed_for_loop_modelling = []
+		residues_needed_for_loop_modelling.append("Loops needed for target %s\n" % (self.pid))
+        
 		i_atom = 0
 		i_residue = 0
+		last_residue_for_loop_modelling = 0
 		for res in targetseq:
 			i_residue += 1
 			for atom in res:
 				i_atom += 1
+				if atom.missing:
+					if (last_residue_for_loop_modelling!=i_residue):
+						residues_needed_for_loop_modelling.append("%i, " % i_residue)
+						last_residue_for_loop_modelling = i_residue
 				# If skipBlanks is True then only print atoms that aren't missing
 				# Otherwise print all atoms
 				if not skipBlanks or not atom.missing:
@@ -567,6 +575,11 @@ class Protein:
 		fname = '%s/%s.pdb' % (self.targetsfolder,self.pid)
 		f = open(fname,'w')
 		f.writelines(lines)
+		f.close()
+        
+		resname = '%s/%s.residue' % (self.targetsfolder,self.pid)
+		f = open(resname,'w')
+		f.writelines(residues_needed_for_loop_modelling)
 		f.close()
 
 	def __str__(self):
