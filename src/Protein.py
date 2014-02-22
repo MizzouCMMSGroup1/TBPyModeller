@@ -333,7 +333,7 @@ class Protein:
 
 		return lines, infos
 
-	def alignPDB(self):
+	def alignPDB(self, skipBlanks = True):
 		# Sort the alignments by similarity
 		alignments = self.alignments
 		alignments.sort(key = lambda a: a.score,reverse=True)
@@ -556,7 +556,9 @@ class Protein:
 			i_residue += 1
 			for atom in res:
 				i_atom += 1
-				if not atom.missing:
+				# If skipBlanks is True then only print atoms that aren't missing
+				# Otherwise print all atoms
+				if not skipBlanks or not atom.missing:
 					lines.append('ATOM  %5d %4s%c%3s %c%4d%c   %8.3f%8.3f%8.3f%6.2f%6.2f          %2s%2s\n' % (
 						i_atom,atom.atomName,atom.altLoc,atom.resName,atom.chainId,i_residue,atom.codeForInsertion,
 						atom.xcoord,atom.ycoord,atom.zcoord,atom.occ,atom.temp,atom.elemSym,atom.charge

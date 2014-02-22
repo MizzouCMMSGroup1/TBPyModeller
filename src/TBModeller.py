@@ -17,10 +17,13 @@ from Bio.SeqRecord import SeqRecord
 import sys
 import re
 import os
+import shutil
 
 targets = []
 
 debug = True
+
+skipBlanks = False
 
 def main():
 	for target in targets:
@@ -28,8 +31,14 @@ def main():
 		print()
 		print(target.getTemplates())
 		print(target.getPDBs())
-		target.alignPDB()
-		os.system("Scwrl4 -i targets/%s.pdb -o targets/%s_chain.pdb" % (target,target))
+		target.alignPDB(skipBlanks = skipBlanks)
+
+		# If we are skipping blanks we can use Scwrl4
+		# Otherwise, fake the operation for now
+		if skipBlanks:
+			os.system("Scwrl4 -i targets/%s.pdb -o targets/%s_chain.pdb" % (target,target))
+		else:
+			shutil.copyfile('targets/%s.pdb' % (target), 'targets/%s_chain.pdb' % (target))
 
 if __name__ == "__main__":
 	# RUN ME
