@@ -270,9 +270,13 @@ BuildStructure(target,template,structure):
 
 \section{Optimization and sidechains}
 
+\section{Modeller}
+
+Now, we have a candidate PDB file.  However, there are still gaps in our protein where the two structures did not match.  In these spots, the above script generates matching protein data, but these atoms are simply generated and as such not part of the final protein.  To combat this problem, we have modified our code slightly to output missing residues.  Then, we use Modeller, a popular python tool in protein modeling, to re-optimize these residues so that they will match the rest of our protein. 
+
 \subsection{SCWRL}
 
-Next, we run our candidate PDB file through SCWRL, a program for adding sidechains to a protein backbone.  SCWRL4 is based on an improved graph theory algorithms that solve the combinatorial problem in side-chain prediction more rapidly than many other available programs.\\
+Next, we run our candidate PDB file through SCWRL, a program for optimizing the sidechains in our protein backbone.  SCWRL4 is based on an improved graph theory algorithms that solve the combinatorial problem in side-chain prediction more rapidly than many other available programs.\\
 
 SCWRL4 is based on a new potential function that results in improved accuracy at reasonable speed.It will converge on very large proteins or protein complexes or those with very dense interaction graphs.It depends on a backbone-dependent rotamer library. The library provides lists of chi1-chi2-chi3-chi4 values and their relative probabilities for residues at given phi-psi values, and explores these conformations to minimize sidechain-backbone clashes and sidechain-sidechain clashes.\\
 
@@ -285,7 +289,7 @@ Finally, we used a two-step refinement protocol, called 3Drefine, to consistentl
 \newpage
 \section{Visualization}
 
-After we obtain final target PDB file, we use Jmol to visualize it. At the same time, we also visualize the native one to compare it with our prediction.  The left one is a target structure we generated (T0644), while right one is the native structure.
+After we obtain our final target PDB file, we use Jmol to visualize it. At the same time, we also visualize the native one to compare it with our prediction.  The left one is a target structure we generated (T0644), while right one is the native structure.
 
 \begin{figure}
 \centering
@@ -305,7 +309,7 @@ After we obtain final target PDB file, we use Jmol to visualize it. At the same 
 
 \section{Results}
 
-After we generated the target PDB file, we use TM-Score and RMSD to evaluate our prediction. Also we compared our prediction with other servers’ results based on same target. In our project, we choose MuFold and MULTICOM to compare our results.\\\\
+After we generate the target PDB file, we use TM-Score and RMSD to evaluate our prediction. Also, we compared our prediction with other servers’ results based on same target. For our project, we choose MuFold and MULTICOM to provide a benchmark.\\\\
 TM-score is an algorithm to calculate the structural similarity of two protein models. It is often used to quantitatively assess the accuracy of protein structure predictions relative to the experimental structure. Because TM-score weights the close atom pairs stronger than the distant matches, it is more sensitive to the topology fold than the often-used root-mean-square deviation (RMSD) since a local variation can result in a high RMSD value. TM-score has the value in (0,1). Based on statistics, a TM-score \textless0.17 corresponds to a random similarity and a TM-score \textgreater0.5 generally corresponds to the same fold in SCOP/CATH. The definition of TM-score is independent on the length of the proteins.\\\\
 RMSD is the measure of the average distance between the atoms (usually the backbone atoms) of superimposed proteins. In the study of globular protein conformations, one customarily measures the similarity in three-dimensional structure by the RMSD of the Cα atomic coordinates after optimal rigid body superposition.\\\\
 Our results are shown in the following table. From the table, it would appear that our results are comparable with both MULTICOM and MuFold. But, we have only tried one target we have tried (and tweaked our algorithm to look closer to the end goal, which we knew before). In the future, we should try this approach on some unknown proteins.  But, these metrics provide an interesting objective metric of our predictions.
@@ -342,6 +346,8 @@ Proteins: Structure, Function and Bioinformatics. 2012 (In Press).\\\\
 G. G. Krivov, M. V. Shapovalov, and R. L. Dunbrack, Jr. Improved prediction of protein side-chain conformations with SCWRL4. Proteins (2009).\\\\
 
 Jmol: an open-source Java viewer for chemical structures in 3D. http://www.jmol.org/ \\\\
+
+N. Eswar, M. A. Marti-Renom, B. Webb, M. S. Madhusudhan, D. Eramian, M. Shen, U. Pieper, A. Sali. Comparative Protein Structure Modeling With MODELLER. Current Protocols in Bioinformatics, John Wiley & Sons, Inc., Supplement 15, 5.6.1-5.6.30, 2006.\\\\
 
 Y. Zhang, J. Skolnick, Scoring function for automated assessment of protein structure template quality, Proteins, 2004 57: 702-710
 J. Xu, Y. Zhang, How significant is a protein structure similarity with TM-score=0.5? Bioinformatics, 2010 26, 889-895\\\\
