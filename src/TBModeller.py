@@ -24,6 +24,7 @@ targets = []
 debug = True
 
 skipBlanks = False
+modellerCompatibilityMode = True
 
 def main():
 	for target in targets:
@@ -31,7 +32,7 @@ def main():
 		print()
 		print(target.getTemplates())
 		print(target.getPDBs())
-		target.alignPDB(skipBlanks = skipBlanks)
+		target.alignPDB(skipBlanks = skipBlanks, modellerCompatibilityMode = modellerCompatibilityMode)
 
 		# If we are skipping blanks we can use Scwrl4
 		# Otherwise, fake the operation for now

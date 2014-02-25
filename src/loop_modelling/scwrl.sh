@@ -1,0 +1,1 @@
+/usr/local/bin/scwrl4/Scwrl4 -i T0644.BL00010001.pdb -o T0644_scwrl.pdb

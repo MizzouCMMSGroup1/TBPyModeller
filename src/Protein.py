@@ -333,7 +333,7 @@ class Protein:
 
 		return lines, infos
 
-	def alignPDB(self, skipBlanks = True):
+	def alignPDB(self, skipBlanks = True, modellerCompatibilityMode=False):
 		# Sort the alignments by similarity
 		alignments = self.alignments
 		alignments.sort(key = lambda a: a.score,reverse=True)
@@ -564,6 +564,9 @@ class Protein:
 					if (last_residue_for_loop_modelling!=i_residue):
 						residues_needed_for_loop_modelling.append("%i, " % i_residue)
 						last_residue_for_loop_modelling = i_residue
+					# we need to not have chain id's/have non-zero locations so modeller can do loop modelling
+					if (modellerCompatibilityMode):
+						atom.xcoord=(i_atom%4)*2.0
 				# If skipBlanks is True then only print atoms that aren't missing
 				# Otherwise print all atoms
 				if not skipBlanks or not atom.missing:
