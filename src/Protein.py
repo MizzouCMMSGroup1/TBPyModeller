@@ -571,9 +571,10 @@ class Protein:
 				# Otherwise print all atoms
 				if not skipBlanks or not atom.missing:
 					lines.append('ATOM  %5d %4s%c%3s %c%4d%c   %8.3f%8.3f%8.3f%6.2f%6.2f          %2s%2s\n' % (
-						i_atom,atom.atomName,atom.altLoc,atom.resName,atom.chainId,i_residue,atom.codeForInsertion,
+						i_atom,atom.atomName,atom.altLoc,atom.resName,' ',i_residue,atom.codeForInsertion,
 						atom.xcoord,atom.ycoord,atom.zcoord,atom.occ,atom.temp,atom.elemSym,atom.charge
 					))
+					 '''blank character replaces atom.chainId'''
 
 		fname = '%s/%s.pdb' % (self.targetsfolder,self.pid)
 		f = open(fname,'w')
