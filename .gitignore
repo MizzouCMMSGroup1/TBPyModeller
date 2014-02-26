@@ -40,3 +40,5 @@ src/templates-*
 src/alignments-*
 src/fastas-*
 src/targets
+data*/
+cmms*
